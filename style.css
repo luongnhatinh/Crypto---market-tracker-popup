@@ -1,0 +1,369 @@
+/* CSS Reset and Variables */
+:root {
+  --bg-primary: #0d1117;
+  --bg-secondary: #161b22;
+  --bg-card: rgba(22, 27, 34, 0.6);
+  --border-color: rgba(48, 54, 61, 0.8);
+  --border-hover: rgba(139, 92, 246, 0.4);
+  --text-primary: #f0f6fc;
+  --text-secondary: #8b949e;
+  --accent-color: #8b5cf6; /* Modern Purple */
+  --accent-glow: rgba(139, 92, 246, 0.15);
+  
+  --crypto-up: #26a69a; /* Teal-green */
+  --crypto-down: #ef5350; /* Rose-red */
+  --crypto-up-bg: rgba(38, 166, 154, 0.12);
+  --crypto-down-bg: rgba(239, 83, 80, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 300px;
+  background-color: var(--bg-primary);
+  font-family: 'Inter', sans-serif;
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+.app-container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+.app-title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+}
+
+.pulse-indicator {
+  width: 8px;
+  height: 8px;
+  background-color: var(--crypto-up);
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(38, 166, 154, 0.7);
+  animation: pulse 1.6s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(38, 166, 154, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(38, 166, 154, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(38, 166, 154, 0);
+  }
+}
+
+/* Biểu mẫu thêm mã mới */
+.add-coin-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+#coin-input {
+  flex: 1;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+#coin-input:focus {
+  border-color: var(--accent-color);
+}
+
+#coin-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.btn-add {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-add:hover {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.4);
+}
+
+/* Dòng hướng dẫn quy tắc nhập */
+.input-guide {
+  font-size: 9.5px;
+  color: var(--text-secondary);
+  padding: 0 2px;
+  line-height: 1.4;
+  margin-top: -6px;
+  margin-bottom: 2px;
+}
+
+.input-guide code {
+  background-color: var(--bg-secondary);
+  padding: 1px 3px;
+  border-radius: 4px;
+  color: var(--accent-color);
+  font-family: monospace;
+  font-weight: 500;
+}
+
+/* Danh sách coin */
+.crypto-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+/* Tùy chỉnh thanh cuộn đẹp mắt cho danh sách */
+.crypto-list::-webkit-scrollbar {
+  width: 4px;
+}
+.crypto-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.crypto-list::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 2px;
+}
+.crypto-list::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Thẻ coin */
+.crypto-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px;
+  padding-right: 36px; /* Nhường chỗ cho nút xóa */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+}
+
+.crypto-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-hover);
+  box-shadow: 0 6px 16px var(--accent-glow);
+}
+
+.coin-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.coin-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  user-select: none;
+}
+
+.coin-meta {
+  display: flex;
+  flex-direction: column;
+  max-width: 130px; /* Tránh đè chữ */
+}
+
+.coin-symbol {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.coin-name {
+  font-size: 10px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.coin-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.coin-price {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.coin-change {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.coin-change.positive {
+  color: var(--crypto-up);
+  background-color: var(--crypto-up-bg);
+}
+
+.coin-change.negative {
+  color: var(--crypto-down);
+  background-color: var(--crypto-down-bg);
+}
+
+/* Nút xóa coin khỏi danh sách */
+.btn-delete {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%) scale(0.8);
+  opacity: 0;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.crypto-card:hover .btn-delete {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+.btn-delete:hover {
+  background-color: rgba(239, 83, 80, 0.15);
+  color: var(--crypto-down);
+}
+
+/* Thông điệp danh sách trống hoặc văn bản tải */
+.empty-state {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 11px;
+  padding: 24px 8px;
+  border: 1px dashed var(--border-color);
+  border-radius: 12px;
+  line-height: 1.5;
+}
+
+.loading-text {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 11px;
+  padding: 12px 0;
+}
+
+/* Footer / Refresh Button */
+.app-footer {
+  margin-top: 4px;
+}
+
+.btn-refresh {
+  width: 100%;
+  background-color: var(--accent-color);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+}
+
+.btn-refresh:hover {
+  background-color: #7c3aed;
+  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-refresh:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(139, 92, 246, 0.2);
+}
+
+.refresh-icon {
+  width: 13px;
+  height: 13px;
+  transition: transform 0.6s ease;
+}
+
+.btn-refresh:hover .refresh-icon {
+  transform: rotate(180deg);
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

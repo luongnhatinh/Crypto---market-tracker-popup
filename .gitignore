@@ -1,0 +1,5 @@
+# Ignore temporary development files
+resize_icons.ps1
+*.zip
+.DS_Store
+Thumbs.db

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crypto & Stock Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <h1 class="app-title">Thị trường hôm nay</h1>
+      <div class="pulse-indicator" title="Kết nối trực tuyến"></div>
+    </header>
+
+    <!-- Biểu mẫu thêm mã mới -->
+    <div class="add-coin-form">
+      <input type="text" id="coin-input" placeholder="Nhập mã cần theo dõi..." maxlength="15">
+      <button id="add-btn" class="btn-add" title="Thêm mã">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Hướng dẫn quy tắc nhập mã -->
+    <div class="input-guide">
+      <span>💡 Quy tắc: <b>Cổ phiếu VN</b> thêm <b>.VN</b> (VD: <code>ACB.VN</code>) | <b>Mỹ</b> viết trơn (<code>AAPL</code>)</span>
+    </div>
+
+    <!-- Danh sách hiển thị động -->
+    <main class="crypto-list" id="crypto-list-container">
+      <p class="loading-text">Đang chuẩn bị danh sách...</p>
+    </main>
+
+    <footer class="app-footer">
+      <button id="refresh-btn" class="btn-refresh">
+        <svg class="refresh-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+        </svg>
+        Làm mới
+      </button>
+    </footer>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
