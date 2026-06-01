@@ -126,7 +126,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         coinList = coinList.filter(s => s !== symToDelete);
         await storage.set({ coins: coinList });
         renderList();
-        fetchPrices();
+        fetchPrices(false);
+        startAutoRefresh();
       });
 
       listContainer.appendChild(card);
@@ -134,16 +135,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // Gọi Yahoo Finance API để cập nhật dữ liệu giá
-  async function fetchPrices() {
+  async function fetchPrices(isSilent = false) {
     if (coinList.length === 0) return;
 
-    refreshBtn.disabled = true;
-    refreshBtn.innerHTML = `
-      <svg class="refresh-icon spinning" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-      </svg>
-      Đang tải...
-    `;
+    if (!isSilent) {
+      refreshBtn.disabled = true;
+      refreshBtn.innerHTML = `
+        <svg class="refresh-icon spinning" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+        </svg>
+        Đang tải...
+      `;
+    } else {
+      // Khi làm mới tự động (im lặng), chỉ hiển thị xoay tròn biểu tượng refresh ở chân trang
+      const icon = refreshBtn.querySelector('.refresh-icon');
+      if (icon) {
+        icon.classList.add('spinning');
+      }
+    }
 
     try {
       await Promise.all(
@@ -209,13 +218,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (error) {
       console.error('Lỗi khi lấy dữ liệu tổng:', error);
     } finally {
-      refreshBtn.disabled = false;
-      refreshBtn.innerHTML = `
-        <svg class="refresh-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-        </svg>
-        Làm mới
-      `;
+      if (!isSilent) {
+        refreshBtn.disabled = false;
+        refreshBtn.innerHTML = `
+          <svg class="refresh-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+          </svg>
+          Làm mới
+        `;
+      } else {
+        const icon = refreshBtn.querySelector('.refresh-icon');
+        if (icon) {
+          icon.classList.remove('spinning');
+        }
+      }
     }
   }
 
@@ -275,7 +291,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         await storage.set({ coins: coinList });
         coinInput.value = '';
         renderList();
-        fetchPrices();
+        fetchPrices(false);
+        startAutoRefresh();
       }
     } else {
       alert(`Không thể xác thực mã "${rawVal}". \n\nHướng dẫn quy tắc nhập mã: \n- Cổ phiếu VN: Bắt buộc thêm đuôi ".VN" (Ví dụ: ACB.VN, HPG.VN, VNM.VN)\n- Crypto: BTC, ETH, SOL (Hệ thống tự động nhận diện)\n- Cổ phiếu Mỹ: AAPL, TSLA, ACB (Viết trơn không đuôi)`);
@@ -292,13 +309,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     `;
   }
 
+  // Quản lý đồng hồ tự động cập nhật
+  let autoRefreshInterval;
+
+  function startAutoRefresh() {
+    stopAutoRefresh();
+    // Tự động tải im lặng (silent) mỗi 5 giây
+    autoRefreshInterval = setInterval(() => {
+      fetchPrices(true);
+    }, 5000);
+  }
+
+  function stopAutoRefresh() {
+    if (autoRefreshInterval) {
+      clearInterval(autoRefreshInterval);
+    }
+  }
+
   // Lắng nghe sự kiện người dùng
   addBtn.addEventListener('click', addCoin);
   coinInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') addCoin();
   });
 
-  // Tải dữ liệu ban đầu
+  // Sự kiện làm mới thủ công
+  refreshBtn.addEventListener('click', () => {
+    fetchPrices(false); // Gọi tải nổi bật (chặn nút bấm)
+    startAutoRefresh();  // Reset lại chu kỳ tự động 5s
+  });
+
+  // Tải dữ liệu ban đầu khi mở popup
   renderList();
-  fetchPrices();
+  fetchPrices(false);
+  startAutoRefresh();
 });
